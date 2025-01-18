@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -8,18 +9,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             height: 100%;
-            overflow: hidden; /* Запрет прокрутки */
-            position: relative; /* Для абсолютного позиционирования кружочков */
+            overflow: hidden;
+            position: relative;
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a1a, #090909);
-            color: #fff;
+            background: linear-gradient(135deg, #001f3f, #003366);
             font-family: 'Unbounded', Arial, sans-serif;
             display: grid;
             place-items: center;
@@ -27,116 +28,125 @@
 
         .gradient-container {
             position: relative;
-            padding: 20px; /* Уменьшение отступов */
-            background: #222;
-            border-radius: 12px; /* Размер радиуса скругления */
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             text-align: center;
-            width: 90%; /* Уменьшение ширины */
-            max-width: 800px; /* Максимальная ширина (800px) */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
             transition: transform 0.2s ease;
-            z-index: 1; /* Установка z-index для контейнера */
+            z-index: 1;
         }
 
         .gradient-container:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .logo {
-            margin-bottom: 15px; /* Уменьшенные отступы */
-            width: 53px; /* Уменьшенная ширина логотипа (80px / 1.5) */
-            height: 53px; /* Уменьшенная высота логотипа (80px / 1.5) */
+            margin-bottom: 15px;
+            width: 53px;
+            height: 53px;
             display: block;
             margin-left: auto;
             margin-right: auto;
-            pointer-events: none; /* Запрет взаимодействия с логотипом */
+            pointer-events: none;
         }
 
         .button-container {
             display: flex;
-            justify-content: center; /* Центрирование кнопок */
-            gap: 5px; /* Уменьшенный промежуток между кнопками */
-            margin-top: 15px; /* Уменьшенные отступы */
-            flex-wrap: wrap; /* Позволяет кнопкам переноситься на новую строку на узких экранах */
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
         }
 
         .button {
-            padding: 20px 20px; /* Уменьшенные размеры кнопок */
-            background: linear-gradient(90deg, rgba(255, 140, 0, 1), rgba(255, 165, 0, 1));
+            padding: 15px 20px;
+            background: #1e90ff;
             color: #fff;
             border: none;
             border-radius: 5px;
-            font-size: 0.9rem; /* Уменьшенный размер шрифта */
+            font-size: 0.9rem;
             font-family: 'Unbounded', Arial, sans-serif;
             text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
             transition: background 0.3s ease, transform 0.2s ease;
-            min-width: 75px; /* Установка минимальной ширины для кнопок */
+            min-width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button i {
+            margin-right: 10px;
         }
 
         .button:hover {
-            background: linear-gradient(90deg, rgba(255, 165, 0, 1), rgba(255, 140, 0, 1));
+            background: #007acc;
             transform: scale(1.05);
         }
 
-        /* Стили для кружочков */
         .circle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.7); /* Белый цвет с прозрачностью */
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 50%;
-            pointer-events: none; /* Запрет интеракции с кружочками */
-            z-index: 0; /* Установка z-index для круга */
+            pointer-events: none;
+            z-index: 0;
         }
 
         @media (max-width: 480px) {
             .button {
-                font-size: 0.6rem; /* Уменьшение размера шрифта на мобильных устройствах */
-                padding: 5px 8px; /* Уменьшенные размеры кнопок на мобильных устройствах */
+                font-size: 0.6rem;
+                padding: 8px 12px;
             }
 
             .gradient-container {
-                padding: 10px; /* Уменьшение отступов на мобильных устройствах */
+                padding: 15px;
             }
         }
     </style>
     <title>Веб-приложение</title>
 </head>
+
 <body>
     <div class="gradient-container">
         <img src='https://i.postimg.cc/XJbfhTfg/image.png' alt='image' class="logo" />
         <div class="button-container">
-            <a href="https://t.me/simanka_love" class="button">НАШ КАНАЛ</a>
-            <a href="https://t.me/sunwayg19_bot" class="button">НАШ ЧАТ</a>
+            <a href="https://t.me/simanka_love" class="button">
+                <i class="fab fa-telegram"></i> НАШ КАНАЛ
+            </a>
+            <a href="https://t.me/sunwayg19_bot" class="button">
+                <i class="fas fa-robot"></i> НАШ БОТ
+            </a>
         </div>
     </div>
 
     <script>
-        // Создание эффекта падающих кружочков
         function createCircle() {
             const circle = document.createElement('div');
-            const size = Math.random() * 4 + 3; // Размер кружочка (от 3 до 7px)
+            const size = Math.random() * 4 + 3;
             circle.classList.add('circle');
-            circle.style.width = size + 'px'; // Установка ширины
-            circle.style.height = size + 'px'; // Установка высоты
-            circle.style.left = Math.random() * 100 + 'vw'; // Случайная позиция по горизонтали
-            circle.style.top = '0'; // Начало падения с самого верха
+            circle.style.width = size + 'px';
+            circle.style.height = size + 'px';
+            circle.style.left = Math.random() * 100 + 'vw';
+            circle.style.top = '0';
             document.body.appendChild(circle);
 
-            // Анимация падения
             circle.animate([
                 { transform: 'translateY(0)' },
                 { transform: `translateY(${window.innerHeight}px)` }
             ], {
-                duration: Math.random() * 5000 + 3000, // Случайная длительность падения (от 3 до 8 секунд)
+                duration: Math.random() * 5000 + 3000,
                 easing: 'linear',
                 fill: 'forwards'
             }).onfinish = () => {
-                circle.remove(); // Удаление кружочка после падения
+                circle.remove();
             };
         }
 
-        // Генерация кружочков
-        setInterval(createCircle, 700); // Создание кружочка каждые 700 мс
+        setInterval(createCircle, 700);
     </script>
 </body>
+
 </html>
