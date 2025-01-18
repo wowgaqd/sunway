@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            height: 100%;
+            overflow: hidden; /* Запрет прокрутки */
+            position: relative; /* Для абсолютного позиционирования кружочков */
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #090909);
+            color: #fff;
+            font-family: 'Unbounded', Arial, sans-serif;
+            display: grid;
+            place-items: center;
+        }
+
+        .gradient-container {
+            position: relative;
+            padding: 20px; /* Уменьшение отступов */
+            background: #222;
+            border-radius: 12px; /* Размер радиуса скругления */
+            text-align: center;
+            width: 90%; /* Уменьшение ширины */
+            max-width: 800px; /* Максимальная ширина (800px) */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s ease;
+            z-index: 1; /* Установка z-index для контейнера */
+        }
+
+        .gradient-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo {
+            margin-bottom: 15px; /* Уменьшенные отступы */
+            width: 53px; /* Уменьшенная ширина логотипа (80px / 1.5) */
+            height: 53px; /* Уменьшенная высота логотипа (80px / 1.5) */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            pointer-events: none; /* Запрет взаимодействия с логотипом */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Центрирование кнопок */
+            gap: 5px; /* Уменьшенный промежуток между кнопками */
+            margin-top: 15px; /* Уменьшенные отступы */
+            flex-wrap: wrap; /* Позволяет кнопкам переноситься на новую строку на узких экранах */
+        }
+
+        .button {
+            padding: 10px 10px; /* Уменьшенные размеры кнопок */
+            background: linear-gradient(90deg, rgba(255, 140, 0, 1), rgba(255, 165, 0, 1));
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.7rem; /* Уменьшенный размер шрифта */
+            font-family: 'Unbounded', Arial, sans-serif;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease;
+            min-width: 80px; /* Установка минимальной ширины для кнопок */
+        }
+
+        .button:hover {
+            background: linear-gradient(90deg, rgba(255, 165, 0, 1), rgba(255, 140, 0, 1));
+            transform: scale(1.05);
+        }
+
+        /* Стили для кружочков */
+        .circle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7); /* Белый цвет с прозрачностью */
+            border-radius: 50%;
+            pointer-events: none; /* Запрет интеракции с кружочками */
+            z-index: 0; /* Установка z-index для круга */
+        }
+
+        @media (max-width: 480px) {
+            .button {
+                font-size: 0.6rem; /* Уменьшение размера шрифта на мобильных устройствах */
+                padding: 5px 8px; /* Уменьшенные размеры кнопок на мобильных устройствах */
+            }
+
+            .gradient-container {
+                padding: 10px; /* Уменьшение отступов на мобильных устройствах */
+            }
+        }
+    </style>
+    <title>Веб-приложение</title>
+</head>
+<body>
+    <div class="gradient-container">
+        <img src='https://i.postimg.cc/XJbfhTfg/image.png' alt='image' class="logo" />
+        <div class="button-container">
+            <a href="https://t.me/simanka_love" class="button">НАШ КАНАЛ</a>
+            <a href="https://t.me/sunwayg19_bot" class="button">НАШ ЧАТ</a>
+        </div>
+    </div>
+
+    <script>
+        // Создание эффекта падающих кружочков
+        function createCircle() {
+            const circle = document.createElement('div');
+            const size = Math.random() * 4 + 3; // Размер кружочка (от 3 до 7px)
+            circle.classList.add('circle');
+            circle.style.width = size + 'px'; // Установка ширины
+            circle.style.height = size + 'px'; // Установка высоты
+            circle.style.left = Math.random() * 100 + 'vw'; // Случайная позиция по горизонтали
+            circle.style.top = '0'; // Начало падения с самого верха
+            document.body.appendChild(circle);
+
+            // Анимация падения
+            circle.animate([
+                { transform: 'translateY(0)' },
+                { transform: `translateY(${window.innerHeight}px)` }
+            ], {
+                duration: Math.random() * 5000 + 3000, // Случайная длительность падения (от 3 до 8 секунд)
+                easing: 'linear',
+                fill: 'forwards'
+            }).onfinish = () => {
+                circle.remove(); // Удаление кружочка после падения
+            };
+        }
+
+        // Генерация кружочков
+        setInterval(createCircle, 700); // Создание кружочка каждые 700 мс
+    </script>
+</body>
+</html>
