@@ -24,21 +24,6 @@
             place-items: center;
         }
 
-        .loader {
-            border: 8px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 8px solid #fff;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            position: absolute;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .gradient-container {
             position: relative;
             padding: 20px;
@@ -112,7 +97,7 @@
         .statistics {
             position: absolute;
             top: 20px;
-            right: 20px;
+            left: 20px;
             background: rgba(255, 255, 255, 0.2);
             color: #fff;
             border-radius: 8px;
@@ -136,13 +121,11 @@
 </head>
 
 <body>
-    <audio id="background-music" src="https://wowgaqd.github.io/sunway/3a4e34ca482d3418922df99.mp3" autoplay loop></audio>
+    <audio id="background-music" src="https://wowgaqd.github.io/sunway/3a4e34ca482d3418922df99.mp3" autoplay loop volume="0.3"></audio>
     
     <div class="statistics">
-        Подписчики: <span id="subscribers-count">0</span><br>
         Посещения: <span id="visits-count">0</span>
     </div>
-    <div class="loader"></div>
     <div class="gradient-container">
         <img src='https://i.postimg.cc/PqL6rY5z/snapedit-1737253790856.png' alt='image' class="logo" />
         <div class="button-container">
@@ -156,6 +139,16 @@
     </div>
 
     <script>
+        let visitsCount = 0;
+
+        // Функция для обновления счетчика посещений и имитации реального количества
+        function updateVisitsCount() {
+            visitsCount++;
+            document.getElementById('visits-count').innerText = visitsCount;
+        }
+
+        setInterval(updateVisitsCount, 1000); // Обновление каждую секунду
+
         function createCircle() {
             const circle = document.createElement('div');
             const size = Math.random() * 4 + 3;
@@ -179,24 +172,6 @@
         }
 
         setInterval(createCircle, 700);
-
-        // Скрываем загрузчик и показываем содержимое через 3 секунды
-        setTimeout(() => {
-            document.querySelector('.loader').style.display = 'none';
-            document.querySelector('.gradient-container').style.display = 'block';
-        }, 3000);
-
-        // Обновление счетчика (здесь значение можно менять программно)
-        let subscribersCount = 0;
-        let visitsCount = 0;
-        
-        // Пример обновления счетчика
-        setInterval(() => {
-            subscribersCount++;
-            visitsCount++;
-            document.getElementById('subscribers-count').innerText = subscribersCount;
-            document.getElementById('visits-count').innerText = visitsCount;
-        }, 2000); // обновляет каждые 2 секунды (можно изменить)
     </script>
 </body>
 
