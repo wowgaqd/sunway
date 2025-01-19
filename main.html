@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -9,8 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -20,10 +18,25 @@
         }
 
         body {
-            background: linear-gradient(135deg, #231b22, #7a3e1f); /* Градиент в стиле карбона */
+            background: linear-gradient(135deg, #231b22, #7a3e1f);
             font-family: 'Unbounded', Arial, sans-serif;
             display: grid;
             place-items: center;
+        }
+
+        .loader {
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 8px solid #fff;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .gradient-container {
@@ -51,7 +64,7 @@
             margin-left: auto;
             margin-right: auto;
             pointer-events: none;
-            border-radius: 50%; /* Круглая аватарка */
+            border-radius: 50%;
         }
 
         .button-container {
@@ -96,6 +109,18 @@
             z-index: 0;
         }
 
+        .statistics {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
         @media (max-width: 480px) {
             .button {
                 font-size: 0.8rem;
@@ -111,13 +136,20 @@
 </head>
 
 <body>
+    <audio id="background-music" src="https://wowgaqd.github.io/sunway/3a4e34ca482d3418922df99.mp3" autoplay loop></audio>
+    
+    <div class="statistics">
+        Подписчики: <span id="subscribers-count">0</span><br>
+        Посещения: <span id="visits-count">0</span>
+    </div>
+    <div class="loader"></div>
     <div class="gradient-container">
         <img src='https://i.postimg.cc/PqL6rY5z/snapedit-1737253790856.png' alt='image' class="logo" />
         <div class="button-container">
             <a href="https://t.me/simanka_love" class="button">
                 <i class="fab fa-telegram"></i> НАШ КАНАЛ
             </a>
-            <a href="https://t.me/sunwayg18bot?start=ref7618874046" class="button">
+            <a href="https://t.me/sunwayg18bot" class="button">
                 <i class="fas fa-robot"></i> НАШ БОТ
             </a>
         </div>
@@ -147,6 +179,24 @@
         }
 
         setInterval(createCircle, 700);
+
+        // Скрываем загрузчик и показываем содержимое через 3 секунды
+        setTimeout(() => {
+            document.querySelector('.loader').style.display = 'none';
+            document.querySelector('.gradient-container').style.display = 'block';
+        }, 3000);
+
+        // Обновление счетчика (здесь значение можно менять программно)
+        let subscribersCount = 0;
+        let visitsCount = 0;
+        
+        // Пример обновления счетчика
+        setInterval(() => {
+            subscribersCount++;
+            visitsCount++;
+            document.getElementById('subscribers-count').innerText = subscribersCount;
+            document.getElementById('visits-count').innerText = visitsCount;
+        }, 2000); // обновляет каждые 2 секунды (можно изменить)
     </script>
 </body>
 
