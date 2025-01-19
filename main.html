@@ -176,41 +176,41 @@
     </div>
 
     <script>
-        // Инициализация счетчика посещений
-        let visitsCount = parseInt(localStorage.getItem('visitsCount')) || 0;
-        const hasVisited = localStorage.getItem('hasVisited');
+    // Инициализация счетчика посещений
+    let visitsCount = parseInt(localStorage.getItem('visitsCount')) || 0;
+    const hasVisited = localStorage.getItem('hasVisited');
 
-        if (!hasVisited) {
-            visitsCount++; // Увеличиваем счетчик при первом визите
-            localStorage.setItem('hasVisited', 'true'); // Отмечаем, что пользователь уже посетил
-            localStorage.setItem('visitsCount', visitsCount); // Сохраняем новое значение
+    if (!hasVisited) {
+        visitsCount++; // Увеличиваем счетчик при первом визите
+        localStorage.setItem('hasVisited', 'true'); // Отмечаем, что пользователь уже посетил
+        localStorage.setItem('visitsCount', visitsCount); // Сохраняем новое значение
+    }
+
+    document.getElementById('visits-count').innerText = visitsCount; // Обновляем отображение
+
+    // Показ статистики
+    document.getElementById('statistics').style.opacity = 1;
+
+    // Генерация снега
+    function createSnowflakes() {
+        const snowContainer = document.querySelector('.snow');
+        for (let i = 0; i < 10; i++) { // Уменьшено количество снежинок до 10
+            const snowflake = document.createElement('div');
+            const size = Math.random() * 8 + 3; // Размер снежинки от 3 до 11px
+            const leftPosition = Math.random() * 100; 
+            const animationDuration = Math.random() * 5 + 5; // Длительность падения от 5 до 10 секунд
+
+            snowflake.className = 'snowflake';
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+            snowflake.style.left = `${leftPosition}vw`;
+            snowflake.style.animationDuration = `${animationDuration}s`;
+            snowflake.style.animationDelay = `${Math.random() * 5}s`; 
+            snowContainer.appendChild(snowflake);
         }
+    }
 
-        document.getElementById('visits-count').innerText = visitsCount; // Обновляем отображение
-
-        // Показ статистики
-        document.getElementById('statistics').style.opacity = 1;
-
-        // Генерация снега
-        function createSnowflakes() {
-            const snowContainer = document.querySelector('.snow');
-            for (let i = 0; i < 20; i++) { 
-                const snowflake = document.createElement('div');
-                const size = Math.random() * 10 + 3; // Размер снежинки от 3 до 13px
-                const leftPosition = Math.random() * 100; 
-                const animationDuration = Math.random() * 5 + 5; // Длительность падения от 5 до 10 секунд
-
-                snowflake.className = 'snowflake';
-                snowflake.style.width = `${size}px`;
-                snowflake.style.height = `${size}px`;
-                snowflake.style.left = `${leftPosition}vw`;
-                snowflake.style.animationDuration = `${animationDuration}s`;
-                snowflake.style.animationDelay = `${Math.random() * 5}s`; 
-                snowContainer.appendChild(snowflake);
-            }
-        }
-
-        createSnowflakes();
-    </script>
+    createSnowflakes();
+</script>
 </body>
 </html>
