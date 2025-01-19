@@ -16,6 +16,8 @@
             overflow: hidden;
             position: relative;
             user-select: none; /* Отключение выделения текста */
+            -webkit-user-select: none; /* Оотключение выделения текста для Safari */
+            -moz-user-select: none; /* Отключение выделения текста для Firefox */
         }
 
         body {
@@ -23,21 +25,6 @@
             font-family: 'Unbounded', Arial, sans-serif;
             display: grid;
             place-items: center;
-        }
-
-        .loader {
-            border: 8px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 8px solid #fff;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            position: absolute;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .gradient-container {
@@ -49,12 +36,7 @@
             width: 90%;
             max-width: 800px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-            transition: transform 0.2s ease;
             z-index: 1;
-        }
-
-        .gradient-container:hover {
-            transform: scale(1.03);
         }
 
         .logo {
@@ -102,14 +84,6 @@
             transform: scale(1.05);
         }
 
-        .circle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
         .statistics {
             position: absolute;
             top: 20px;
@@ -122,7 +96,6 @@
             text-align: center;
             opacity: 0;
             animation: fadeIn 1s forwards;
-            pointer-events: none; /* Отключение взаимодействия с элементом */
         }
 
         @keyframes fadeIn {
@@ -150,7 +123,6 @@
     <div class="statistics" id="statistics">
         Посещения: <span id="visits-count">0</span>
     </div>
-    <div class="loader"></div>
     <div class="gradient-container">
         <img src='https://i.postimg.cc/PqL6rY5z/snapedit-1737253790856.png' alt='logo' class="logo" />
         <div class="button-container">
@@ -167,44 +139,32 @@
         const backgroundMusic = document.getElementById('background-music');
         backgroundMusic.volume = 0.1; // Установить громкость музыки
 
-        // Здесь нужно будет использовать сервер для общего счетчика
-        let visitsCount = 0; // Изначально установлен на 0. Здесь вы должны будете обновлять итоговое количество из сервера.
-
-        document.getElementById('visits-count').innerText = visitsCount;
-        document.getElementById('statistics').style.opacity = 1;
-
-        function createCircle() {
-            const circle = document.createElement('div');
-            const size = Math.random() * 4 + 3;
-            circle.classList.add('circle');
-            circle.style.width = size + 'px';
-            circle.style.height = size + 'px';
-            circle.style.left = Math.random() * 100 + 'vw';
-            circle.style.top = '0';
-            document.body.appendChild(circle);
-
-            circle.animate([
-                { transform: 'translateY(0)' },
-                { transform: `translateY(${window.innerHeight}px)` }
-            ], {
-                duration: Math.random() * 5000 + 3000,
-                easing: 'linear',
-                fill: 'forwards'
-            }).onfinish = () => {
-                circle.remove();
-            };
+        // Функция для получения общего количества посещений с сервера
+        async function getVisitsCount() {
+            try {
+                const response = await fetch('https://ваш_сервер/visits'); // URL вашего сервера
+                const data = await response.json();
+                document.getElementById('visits-count').innerText = data.visitsCount; // Обновляем счетчик с сервера
+                document.getElementById('statistics').style.opacity = 1;
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error);
+            }
         }
 
-        setInterval(createCircle, 700);
+        // Вызываем функцию для получения количества посещений
+        getVisitsCount();
 
-        // Скрываем загрузчик и показываем содержимое через 3 секунды
-        setTimeout(() => {
-            document.querySelector('.loader').style.display = 'none';
-            document.querySelector('.gradient-container').style.display = 'block';
-        }, 3000);
+        // Можно добавить функцию для увеличения счетчика посещений на сервере при загрузке страницы
+        async function incrementVisits() {
+            try {
+                await fetch('https://ваш_сервер/increment', { method: 'POST' }); // URL вашего сервера для увеличения посещений
+            } catch (error) {
+                console.error('Ошибка при увеличении счетчика:', error);
+            }
+        }
 
-        // Здесь можно добавить код для увеличения visitsCount через сервер
-        // Например, отправить запрос на сервер для обновления общего количества и получить его
+        // Увеличиваем счетчик при загрузке страницы
+        incrementVisits();
     </script>
 </body>
 </html>
