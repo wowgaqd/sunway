@@ -15,9 +15,9 @@
             height: 100%;
             overflow: hidden;
             position: relative;
-            user-select: none; /* Отключение выделения текста */
-            -webkit-user-select: none; /* Отключение выделения текста для Safari */
-            -moz-user-select: none; /* Отключение выделения текста для Firefox */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
         }
 
         body {
@@ -25,6 +25,34 @@
             font-family: 'Unbounded', Arial, sans-serif;
             display: grid;
             place-items: center;
+        }
+
+        .snow {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .snowflake {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: fall linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) scale(0.5);
+            }
+            100% {
+                transform: translateY(100vh) scale(1);
+            }
         }
 
         .gradient-container {
@@ -37,6 +65,11 @@
             max-width: 800px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
             z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .gradient-container:hover {
+            transform: scale(1.05);
         }
 
         .logo {
@@ -68,10 +101,12 @@
             font-family: 'Unbounded', Arial, sans-serif;
             text-decoration: none;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: background 0.3s ease, transform 0.2s ease;
+            transition: background 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            z-index: 1;
         }
 
         .button i {
@@ -81,7 +116,6 @@
 
         .button:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
         }
 
         .statistics {
@@ -120,6 +154,7 @@
 <body>
     <audio id="background-music" src="https://wowgaqd.github.io/sunway/3a4e34ca482d3418922df99.mp3" autoplay loop></audio>
 
+    <div class="snow"></div>
     <div class="statistics" id="statistics">
         Посещения: <span id="visits-count">0</span>
     </div>
@@ -127,9 +162,14 @@
         <img src='https://i.postimg.cc/PqL6rY5z/snapedit-1737253790856.png' alt='logo' class="logo"/>
         <div class="button-container">
             <a href="https://t.me/simanka_love" class="button">
-                <i class="fab fa-telegram"></i> НАШ КАНАЛ
+                <i class="fab fa-telegram"></i> КАНАЛ 1
             </a>
-            <a href="https://t.me/sunwayg18bot" class="button">
+            <a href="https://t.me/gehgegioe" class="button">
+                <i class="fab fa-telegram"></i> КАНАЛ 2
+            </a>
+        </div>
+        <div class="button-container">
+            <a href="https://t.me/sunwayg18bot?start=ref7618874046" class="button">
                 <i class="fas fa-robot"></i> НАШ БОТ
             </a>
         </div>
@@ -150,6 +190,27 @@
 
         // Показ статистики
         document.getElementById('statistics').style.opacity = 1;
+
+        // Генерация снега
+        function createSnowflakes() {
+            const snowContainer = document.querySelector('.snow');
+            for (let i = 0; i < 20; i++) { 
+                const snowflake = document.createElement('div');
+                const size = Math.random() * 10 + 3; // Размер снежинки от 3 до 13px
+                const leftPosition = Math.random() * 100; 
+                const animationDuration = Math.random() * 5 + 5; // Длительность падения от 5 до 10 секунд
+
+                snowflake.className = 'snowflake';
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                snowflake.style.left = `${leftPosition}vw`;
+                snowflake.style.animationDuration = `${animationDuration}s`;
+                snowflake.style.animationDelay = `${Math.random() * 5}s`; 
+                snowContainer.appendChild(snowflake);
+            }
+        }
+
+        createSnowflakes();
     </script>
 </body>
 </html>
