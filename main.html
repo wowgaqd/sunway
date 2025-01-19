@@ -18,7 +18,97 @@
             user-select: none; /* Отключение выделения текста */
         }
 
-        /* Остальные стили остаются без изменений */
+        body {
+            background: linear-gradient(135deg, #231b22, #7a3e1f);
+            font-family: 'Unbounded', Arial, sans-serif;
+            display: grid;
+            place-items: center;
+        }
+
+        .loader {
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 8px solid #fff;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .gradient-container {
+            position: relative;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            transition: transform 0.2s ease;
+            z-index: 1;
+        }
+
+        .gradient-container:hover {
+            transform: scale(1.03);
+        }
+
+        .logo {
+            margin-bottom: 15px;
+            width: 53px;
+            height: 53px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: 'Unbounded', Arial, sans-serif;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button i {
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .circle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
         .statistics {
             position: absolute;
@@ -35,7 +125,21 @@
             pointer-events: none; /* Отключение взаимодействия с элементом */
         }
 
-        /* Остальные стили остаются без изменений */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .button {
+                font-size: 0.8rem;
+                padding: 10px 15px;
+            }
+
+            .gradient-container {
+                padding: 15px;
+            }
+        }
     </style>
     <title>Веб-приложение</title>
 </head>
@@ -63,8 +167,8 @@
         const backgroundMusic = document.getElementById('background-music');
         backgroundMusic.volume = 0.1; // Установить громкость музыки
 
-        // Здесь должен быть код для получения общего количества посещений с сервера
-        let visitsCount = 0; // Изначально установите на 0, его нужно будет обновить с сервера.
+        // Здесь нужно будет использовать сервер для общего счетчика
+        let visitsCount = 0; // Изначально установлен на 0. Здесь вы должны будете обновлять итоговое количество из сервера.
 
         document.getElementById('visits-count').innerText = visitsCount;
         document.getElementById('statistics').style.opacity = 1;
@@ -98,6 +202,9 @@
             document.querySelector('.loader').style.display = 'none';
             document.querySelector('.gradient-container').style.display = 'block';
         }, 3000);
+
+        // Здесь можно добавить код для увеличения visitsCount через сервер
+        // Например, отправить запрос на сервер для обновления общего количества и получить его
     </script>
 </body>
 </html>
