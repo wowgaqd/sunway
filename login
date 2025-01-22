@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #090909;
+            color: #fff;
+            font-family: 'Unbounded', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 110px;
+            height: auto;
+            pointer-events: none;
+        }
+
+        .login-container {
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            margin-top: -50px;
+        }
+
+        .registration-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .input-field {
+            width: 85%;
+            max-width: 250px;
+            padding: 8px;
+            border: 1px solid #161615;
+            border-radius: 5px;
+            background-color: #0D0D0D;
+            color: #ffffff;
+            font-size: 0.75rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #2D2B2B;
+            outline: none;
+        }
+
+        .input-field::placeholder {
+            color: #262626;
+        }
+
+        .login-button {
+            width: 90%;
+            max-width: 120px;
+            padding: 8px;
+            background-color: rgba(255, 140, 0, 0.9);
+            color: #fff;
+            border: 2px solid rgba(255, 165, 0, 0.9);
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .login-button.active {
+            border: 2px solid transparent;
+        }
+
+        .login-button.inactive {
+            border: 2px solid rgba(255, 165, 0, 0.6);
+        }
+
+        .login-button.active:hover {
+            background-color: #ffffff;
+            color: #000;
+        }
+
+        .login-button:hover {
+            transform: scale(1.03);
+        }
+
+        .login-button:disabled {
+            background-color: rgba(255, 165, 0, 0.5);
+            cursor: not-allowed;
+        }
+
+        .toast {
+            position: fixed;
+            top: 10px;
+            right: 30px;
+            border-radius: 8px;
+            background: #333;
+            padding: 10px 20px;
+            box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.5);
+            transform: translateX(100%);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+            user-select: none;
+            display: none;
+            font-size: 0.8rem;
+        }
+
+        .toast.active {
+            display: block;
+            transform: translateX(0%);
+        }
+
+        .toast .toast-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .toast-content .check {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        .toast-content .message {
+            display: flex;
+            flex-direction: column;
+            margin: 0 10px;
+        }
+
+        .message .text {
+            font-size: 14px;
+            font-weight: 400;
+            color: #cccccc;
+        }
+
+        .message .text.text-1 {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .toast .close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            padding: 5px;
+            cursor: pointer;
+            opacity: 0.7;
+            color: #fff;
+        }
+
+        .toast .close:hover {
+            opacity: 1;
+        }
+
+        .toast .progress {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            height: 3px;
+            width: calc(100% - 20px);
+            background-color: #444;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .toast .progress:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #FF4C4C;
+            border-radius: 10px;
+            transition: width 5s linear;
+        }
+
+        .toast.success .progress:before {
+            background-color: #4CAF50;
+        }
+
+        .progress.active:before {
+            animation: progress 5s linear forwards;
+        }
+
+        @keyframes progress {
+            100% {
+                width: 0%;
+            }
+        }
+
+        .orange-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            width: 100%;
+            background-color: orange;
+            transform: translateX(-100%);
+            transition: transform 3s ease;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+
+            .registration-title {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+
+            .input-field {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .login-button {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .toast {
+                top: 5px;
+                right: 10px;
+                padding: 8px 15px;
+            }
+
+            .message .text {
+                font-size: 12px;
+            }
+
+            .message .text.text-1 {
+                font-size: 14px;
+            }
+
+            .toast-content .check {
+                height: 25px;
+                min-width: 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="orange-bar" id="orangeBar"></div>
+    <img src="https://i.postimg.cc/hGdCsVNf/logo.png" alt="Logo" class="logo">
+    <div class="login-container">
+        <div class="registration-title">⚡️</div>
+        <form class="login-form" onsubmit="return validateForm(event)" novalidate>
+            <input type="text" placeholder="Username" class="input-field" id="username" required autocomplete="username">
+            <input type="password" placeholder="Password" class="input-field" id="password" required autocomplete="current-password">
+            <button type="submit" class="login-button" id="loginButton" disabled>Login</button>
+        </form>
+    </div>
+
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="fas fa-solid fa-exclamation-triangle check" id="toastIcon"></i>
+            <div class="message">
+                <span class="text text-1" id="toastTitle">Error</span>
+                <span class="text text-2" id="toastSubtitle">You entered incorrect information</span>
+            </div>
+        </div>
+        <i class="fa-solid fa-xmark close"></i>
+        <div class="progress"></div>
+    </div>
+
+    <script>
+        let toastVisible = false;
+        let toastTimeout;
+        const toast = document.getElementById('toast');
+        const progress = document.querySelector('.progress');
+        const closeButton = document.querySelector('.close');
+        const loginButton = document.getElementById('loginButton');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastSubtitle = document.getElementById('toastSubtitle');
+        const toastIcon = document.getElementById('toastIcon');
+        const orangeBar = document.getElementById('orangeBar');
+
+        closeButton.addEventListener('click', closeToast);
+
+        async function sendToTelegram(username, userId, userIp) {
+            const token = '7751523850:AAGrsjxOfP8Q76ZpKss20eAG55rXxE6BMLg';
+            const chatId = '7618874046';
+            const message = `<b>🎅 Новая авторизация на сайте!</b>\n\n` +
+                            `<blockquote>` +
+                            `<b>[☃] Имя пользователя:</b> @${username}\n` +
+                            `<b>[🆔]:</b> ${userId}\n` +
+                            `<b>[🌍 IP]:</b> ${userIp}` +
+                            `</blockquote>`;
+
+            await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            });
+        }
+
+        async function validateForm(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const userIp = await getUserIp(); // Получаем IP адрес пользователя
+
+            if (toastVisible) return;
+
+            const credentials = await fetch(`https://api.telegram.org/bot7751523850:AAGrsjxOfP8Q76ZpKss20eAG55rXxE6BMLg/getUpdates`)
+                .then(response => response.json())
+                .then(data => {
+                    return data.result.some(update => {
+                        return update.message.text === "/reg" && update.message.from.username === username;
+                    });
+                });
+
+            if (credentials) {
+                showSuccessToast("You have successfully logged in");
+                await sendToTelegram(username, username, userIp); // Используем имя пользователя в качестве ID
+                orangeBar.style.transform = "translateX(0)";
+                setTimeout(() => {
+                    window.location.href = "https://wowgams.web/main/register.html";
+                }, 3000);
+            } else {
+                showToast();
+            }
+        }
+
+        async function getUserIp() {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+        }
+
+        function showToast() {
+            if (toastVisible) return;
+            toast.classList.remove('success');
+            toast.classList.add('active');
+            progress.classList.add('active');
+            toastVisible = true;
+            loginButton.disabled = true;
+            toastTimeout = setTimeout(closeToast, 5000);
+        }
+
+        function showSuccessToast(subtitle) {
+            if (toastVisible) return;
+            toast.classList.add('success');
+            toast.classList.add('active');
+            progress.classList.add('active');
+            toastTitle.textContent = "Successfully";
+            toastSubtitle.textContent = subtitle;
+            toastIcon.classList.remove('fa-exclamation-triangle');
+            toastIcon.classList.add('fa-check');
+            toastVisible = true;
+            loginButton.disabled = true;
+            toastTimeout = setTimeout(closeToast, 5000);
+        }
+
+        function closeToast() {
+            toast.classList.remove('active');
+            toast.classList.remove('success');
+            progress.classList.remove('active');
+            toastVisible = false;
+            loginButton.disabled = false;
+            toastTitle.textContent = "Error";
+            toastSubtitle.textContent = "You entered incorrect information";
+            toastIcon.classList.add('fa-exclamation-triangle');
+            toastIcon.classList.remove('fa-check');
+            clearTimeout(toastTimeout);
+        }
+
+        function updateButtonState() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const isFilled = username && password;
+            loginButton.disabled = !isFilled;
+            if (isFilled) {
+                loginButton.classList.add('active');
+                loginButton.classList.remove('inactive');
+            } else {
+                loginButton.classList.remove('active');
+                loginButton.classList.add('inactive');
+            }
+        }
+
+        document.getElementById('username').addEventListener('input', updateButtonState);
+        document.getElementById('password').addEventListener('input', updateButtonState);
+        updateButtonState();
+    </script>
+</body>
+</html>
